@@ -37,44 +37,47 @@ void Server::startRead(){
     datagram.clear();
     while (client->bytesAvailable())
         datagram.append(client->readAll());
-     //cout << datagram.data();// << endl;      //DBG
+    //cout << datagram.data();// << endl;      //DBG
 
-    for (int i = 0; i < dInpSize; i++) {
-        dInpArr[i] = datagram.data()[i];
-    }
+    if (!datagram.isEmpty()) {
 
-    for (int i = 0; i < dOutSize; i++) {
-        dOutReadArr[i] = datagram.data()[i + dInpSize];
-    }
-    int pos = dInpSize+dOutSize;
-    char ch = datagram.at(pos);
-    //cout << ch << endl;      //DBG
-
-    int j = 0, x = 0;
-    while (ch != 'Z') {
-        //x = 0;
-        if (ch == 'A') {
-            char temp[16];
-            j = -1;
-            do {
-                pos++;
-                ch = datagram.at(pos);
-                //cout << " " << ch;
-                if (ch == 'Z') break;
-                if (ch == 'A') break;
-                j++;
-                temp[j] = ch;
-
-            } while ( ch != 'Z' );
-
-            temp [j+1] = '\0';
-            aInpArr[x] = atoi(temp);
-            //cout << " " << aInpArr[i];
-            x++;
-
+        for (int i = 0; i < dInpSize; i++) {
+            dInpArr[i] = datagram.data()[i];
         }
+
+        for (int i = 0; i < dOutSize; i++) {
+            dOutReadArr[i] = datagram.data()[i + dInpSize];
+        }
+        int pos = dInpSize+dOutSize;
+        char ch = datagram.at(pos);
+        //cout << ch << endl;      //DBG
+
+        int j = 0, x = 0;
+        while (ch != 'Z') {
+            //x = 0;
+            if (ch == 'A') {
+                char temp[16];
+                j = -1;
+                do {
+                    pos++;
+                    ch = datagram.at(pos);
+                    //cout << " " << ch;
+                    if (ch == 'Z') break;
+                    if (ch == 'A') break;
+                    j++;
+                    temp[j] = ch;
+
+                } while ( ch != 'Z' );
+
+                temp [j+1] = '\0';
+                aInpArr[x] = atoi(temp);
+                //cout << " " << aInpArr[i];
+                x++;
+
+            }
+        }
+        //cout << endl;
     }
-    //cout << endl;
 
     emit this->readFinished();
     //client->close();
