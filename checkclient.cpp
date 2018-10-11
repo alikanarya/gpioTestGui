@@ -23,9 +23,11 @@ void checkClient::run(){
 
 void checkClient::connect(){
 
+    cout <<"checkClient::connect()" << endl;    //DBG
+
     if (clientx->clientSocket.state() != QAbstractSocket::ConnectingState &&
         clientx->clientSocket.state() != QAbstractSocket::ConnectedState ){
-        //cout << "checkClient" << endl;    //DBG
+        cout << "checkClient" << endl;    //DBG
         clientx->start();
     }
 

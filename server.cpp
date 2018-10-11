@@ -27,7 +27,7 @@ Server::~Server(){
 
 void Server::acceptConnection(){
 
-    //cout <<"acceptConnection" << endl;    //DBG
+    cout <<"acceptConnection" << endl;    //DBG
     client = server.nextPendingConnection();
     connect(client, SIGNAL(readyRead()), this, SLOT(startRead()));
 }
@@ -37,10 +37,10 @@ void Server::startRead(){
     datagram.clear();
     while (client->bytesAvailable())
         datagram.append(client->readAll());
-    //cout << datagram.data();// << endl;      //DBG
 
     if (!datagram.isEmpty()) {
 
+        cout << datagram.data();// << endl;      //DBG
         for (int i = 0; i < dInpSize; i++) {
             dInpArr[i] = datagram.data()[i];
         }
@@ -53,7 +53,7 @@ void Server::startRead(){
         //cout << ch << endl;      //DBG
 
         int j = 0, x = 0;
-        while (ch != 'Z') {
+        /*while (ch != 'Z') {
             //x = 0;
             if (ch == 'A') {
                 char temp[16];
@@ -75,7 +75,7 @@ void Server::startRead(){
                 x++;
 
             }
-        }
+        }*/
         //cout << endl;
     }
 
