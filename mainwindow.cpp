@@ -15,6 +15,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     ui->setupUi(this);
 
+    settings = new QSettings(INIFILENAME, QSettings::IniFormat);
+    readSettings();
+
     serverx = new Server();
     clientx = new Client();
     checkClientX = new checkClient();
@@ -145,6 +148,11 @@ void MainWindow::displayInputs(){
 
     ui->ai0_raw->setText(QString::number(aInpArr[0]));
     ui->ai1_raw->setText(QString::number(aInpArr[1]));
+    ui->ai2_raw->setText(QString::number(aInpArr[2]));
+    ui->ai3_raw->setText(QString::number(aInpArr[3]));
+    ui->ai4_raw->setText(QString::number(aInpArr[4]));
+    ui->ai5_raw->setText(QString::number(aInpArr[5]));
+    ui->ai6_raw->setText(QString::number(aInpArr[6]));
 
     aInpArrVal[0] = aInpArr[0] / 22.755555;
     ui->ai0->setText(QString::number(aInpArrVal[0],'f',1));
@@ -239,4 +247,18 @@ void MainWindow::on_aOut4_sliderReleased(){
 
     aOutArr[3] = ui->aOut4->value();
     emit sendData();
+}
+
+bool MainWindow::readSettings(){
+
+    if (QFile::exists(INIFILENAME)){
+
+        clientAddress = settings->value("clientAddress0", _CLIENT_ADR).toString();
+        cout << clientAddress.toUtf8().constData() << endl;
+        return true;
+
+    } else {
+        qDebug() << "ini file not found" << endl;
+        return false;
+    }
 }

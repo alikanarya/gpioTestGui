@@ -4,6 +4,9 @@
 #include "server.h"
 #include "client.h"
 
+#define INIFILENAME         "settings.ini"
+#define _CLIENT_ADR         "localhost"
+
 QString MSG_SERVER_INIT = "Server is listening...";
 QString MSG_CLIENT_CONN = "Client connected";
 QString MSG_HI = "Hi by Windows";
@@ -29,7 +32,7 @@ int aOutArr[aOutSize];
 
 //QString clientAddress = "192.168.2.232"; // BBB ***
 QString clientAddress = "192.168.1.48"; // BBB ***
-//QString clientAddress = "192.168.1.124"; // BBBak
+//QString clientAddress = "192.168.1.247"; // BBBak
 
 //QString clientAddress = "192.168.2.241"; // DebianVB
 //QString clientAddress = "192.168.2.222"; // Windows

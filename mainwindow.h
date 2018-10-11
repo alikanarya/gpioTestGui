@@ -12,7 +12,11 @@ class MainWindow : public QMainWindow{
     Q_OBJECT
 
 public:
+
+    QSettings *settings;                // settings: to read/write ini file
+
     explicit MainWindow(QWidget *parent = 0);
+    bool readSettings();
 
     ~MainWindow();
 
