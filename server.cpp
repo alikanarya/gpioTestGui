@@ -13,6 +13,7 @@ extern int dOutSize;
 extern char dOutReadArr[];
 extern int aInpArr[];
 extern int aInpSize;
+//extern Client *clientx;
 
 Server::Server(QObject* parent): QObject(parent){
 

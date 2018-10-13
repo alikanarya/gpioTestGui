@@ -26,3 +26,5 @@ HEADERS  += mainwindow.h \
     checkclient.h \
 
 FORMS    += mainwindow.ui
+
+LIBS += -lws2_32
