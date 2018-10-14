@@ -29,6 +29,8 @@ private slots:
 
     void ConnectedToServer();
     void NotConnectedToServer();
+    void dataValidSlot();
+    void dataInValidSlot();
 
     void displayInputs();
     void transferData();

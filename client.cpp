@@ -20,11 +20,12 @@ Client::Client(QObject* parent): QObject(parent){
 
     host.setAddress(clientAddress);
     connect(&clientSocket, SIGNAL(connected()), this, SLOT(connectionEstablished()));
+
+    /*
     int enableKeepAlive = 1;
     int fd = clientSocket.socketDescriptor();
     //clientSocket.setSocketOption(QAbstractSocket::KeepAliveOption,1);
     setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, (char *) &enableKeepAlive, sizeof(enableKeepAlive));
-    /*
     int maxIdle = 10; // seconds
     setsockopt(fd, IPPROTO_TCP, TCP_KEEPIDLE, &maxIdle, sizeof(maxIdle));
 

@@ -42,6 +42,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     timerSec->start(1000);
 
     connect(serverx, SIGNAL(readFinished()),this, SLOT(displayInputs()));
+    connect(serverx, SIGNAL(dataValid()),this, SLOT(dataValidSlot()));
+    connect(serverx, SIGNAL(dataInValid()),this, SLOT(dataInValidSlot()));
     connect(checkClientX, SIGNAL(Connected()),this, SLOT(ConnectedToServer()));
     connect(checkClientX, SIGNAL(notConnected()),this, SLOT(NotConnectedToServer()));
     connect(this, SIGNAL(sendData()),this, SLOT(transferData()));
@@ -79,9 +81,15 @@ void MainWindow::NotConnectedToServer(){
     ui->dOUT2->setStyleSheet("background-color: light gray");
     ui->dOUT3->setStyleSheet("background-color: light gray");
     ui->dOUT4->setStyleSheet("background-color: light gray");
-
 }
 
+void MainWindow::dataValidSlot(){
+    ui->dataErrorLabel->hide();
+}
+
+void MainWindow::dataInValidSlot(){
+    ui->dataErrorLabel->show();
+}
 
 void MainWindow::displayInputs(){
 

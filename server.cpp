@@ -13,6 +13,7 @@ extern int dOutSize;
 extern char dOutReadArr[];
 extern int aInpArr[];
 extern int aInpSize;
+extern int dataBufferSize;
 //extern Client *clientx;
 
 Server::Server(QObject* parent): QObject(parent){
@@ -38,73 +39,75 @@ void Server::startRead(){
 
     datagram.clear();
     //while (client->waitForReadyRead(300)) {
+    //cout << client->bytesAvailable() << "--";
     while (client->bytesAvailable() > 0) {
         datagram.append(client->readAll());
         client->flush();
     }
     //}
 
-    if (!datagram.isEmpty()) {
+    bool validData = !datagram.isEmpty() && datagram.size() == dataBufferSize && datagram.at(datagram.size()-1) == 'Z';
 
-        cout << datagram.data() << endl;      //DBG
-
-        bool validData = true;
-        if (datagram.size() != 48)
-            validData = false;
-
+    // DI && DO buffer check
+    if (validData) {
         for (int k=0; k<dInpSize+dOutSize; k++) {
             if ( !QChar(datagram.at(k)).isDigit() ) {
                 validData = false;
                 cout << datagram.at(k);
             }
         }
+    }
 
-        if (validData) {
-            for (int i = 0; i < dInpSize; i++) {
-                dInpArr[i] = datagram.data()[i];
-            }
+    if (validData) {
 
-            for (int i = 0; i < dOutSize; i++) {
-                dOutReadArr[i] = datagram.data()[i + dInpSize];
-            }
+        emit dataValid();
+
+        for (int i = 0; i < dInpSize; i++) {
+            dInpArr[i] = datagram.data()[i];
         }
 
-        if (validData && datagram.at(datagram.size()-1) == 'Z') {
+        for (int i = 0; i < dOutSize; i++) {
+            dOutReadArr[i] = datagram.data()[i + dInpSize];
+        }
 
-            int pos = dInpSize+dOutSize;
-            char ch = datagram.at(pos);
-            //cout << ch << endl;      //DBG
-            int j = 0, x = 0;
+        int pos = dInpSize+dOutSize;
+        char ch = datagram.at(pos);
+        //cout << ch << endl;      //DBG
+        int j = 0, x = 0;
 
-            while (ch != 'Z') {
-                //x = 0;
-                if (ch == 'A') {
-                    char temp[16];
-                    j = -1;
-                    do {
-                        pos++;
-                        ch = datagram.at(pos);
-                        //cout << " " << ch;
-                        if (ch == 'Z') break;
-                        if (ch == 'A') break;
-                        j++;
-                        temp[j] = ch;
+        while (ch != 'Z') {
+            //x = 0;
+            if (ch == 'A') {
+                char temp[16];
+                j = -1;
+                do {
+                    pos++;
+                    ch = datagram.at(pos);
+                    //cout << " " << ch;
+                    if (ch == 'Z') break;
+                    if (ch == 'A') break;
+                    j++;
+                    temp[j] = ch;
 
-                    } while ( ch != 'Z' );
+                } while ( ch != 'Z' );
 
-                    temp [j+1] = '\0';
-                    if ( x < aInpSize ) {
-                        aInpArr[x] = atoi(temp);
-                        //cout << " " << aInpArr[x];
-                    } else
-                        break;
-                    x++;
-                }
+                temp [j+1] = '\0';
+                if ( x < aInpSize ) {
+                    aInpArr[x] = atoi(temp);
+                    //cout << " " << aInpArr[x];
+                } else
+                    break;
+                x++;
             }
         }
         //cout << endl;
+        emit this->readFinished();
+    } else {
+        if (!datagram.isEmpty()) {
+            cout << datagram.data() << endl;      //DBG
+            emit dataInValid();
+        }
     }
 
-    emit this->readFinished();
     //client->close();
 }
