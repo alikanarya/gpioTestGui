@@ -17,7 +17,8 @@ extern const int dInpSize = 8;
 extern const int dOutSize = 4;
 extern const int aInpSize = 7;
 extern const int aOutSize = 4;
-extern const int dataBufferSize = 48;   // dInpSize+dOutSize+aInpSize*5{A+4digit}+1{Z}
+extern const int dataBufferSizeMax = 48;   // dInpSize+dOutSize+aInpSize*5{A+4digit}+1{Z}
+extern const int dataBufferSizeMin = 27;   // dInpSize+dOutSize+aInpSize*2{A+1digit}+1{Z}
 
 char dInpArr[dInpSize+1];
 int dInpGpioMap[dInpSize] = {45, 44, 26, 47, 46, 27, 65, 61};

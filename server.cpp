@@ -13,7 +13,8 @@ extern int dOutSize;
 extern char dOutReadArr[];
 extern int aInpArr[];
 extern int aInpSize;
-extern int dataBufferSize;
+extern int dataBufferSizeMax;
+extern int dataBufferSizeMin;
 //extern Client *clientx;
 
 Server::Server(QObject* parent): QObject(parent){
@@ -46,7 +47,7 @@ void Server::startRead(){
     }
     //}
 
-    bool validData = !datagram.isEmpty() && datagram.size() == dataBufferSize && datagram.at(datagram.size()-1) == 'Z';
+    bool validData = !datagram.isEmpty() && datagram.size() >= dataBufferSizeMin && datagram.size() <= dataBufferSizeMax && datagram.at(datagram.size()-1) == 'Z';
 
     // DI && DO buffer check
     if (validData) {
